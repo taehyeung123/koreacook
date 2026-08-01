@@ -1,0 +1,23 @@
+User-agent: *
+Allow: /
+
+# 주요 AI 크롤러 명시 허용 (GEO)
+User-agent: GPTBot
+Allow: /
+
+User-agent: OAI-SearchBot
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+User-agent: Yeti
+Allow: /
+
+Sitemap: https://taehyeung123.github.io/koreacook/sitemap.xml

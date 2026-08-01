@@ -1,0 +1,75 @@
+# 코리아요리아트아카데미 대전점 · 요리학과 랜딩페이지
+
+대전 둔산동 요리학원(코리아요리아트아카데미 대전점)의 **요리학과 단독 DB수집형 랜딩페이지**입니다.
+`코리아요리아트아카데미_대전점_요리학과_랜딩페이지_기획서.md` 기반으로 제작되었습니다.
+
+- **라이브 URL(예정)** : https://taehyeung123.github.io/koreacook/
+- **스택** : 정적 HTML + CSS + Vanilla JS (빌드 불필요, GitHub Pages 바로 배포)
+- **브랜드** : daejeon.kcookart.com 실사용 값 추출 적용
+  - 메인 컬러 `#ffc000` (골드) — 공식 사이트 CSS `--main-color` 그대로
+  - 다크 컬러 `#27373f` (차콜 네이비), 보조 `#9e8269` (브론즈)
+  - 서체 Pretendard (공식 사이트 동일)
+  - 로고·과정 썸네일 21종·대전점 실사 시설 사진 19장 (`assets/`)
+
+## 파일 구조
+
+```
+index.html      메인 랜딩페이지 (전 섹션 + JSON-LD 구조화 데이터)
+privacy.html    개인정보처리방침 (공식 사이트 원문 이관)
+404.html        GitHub Pages 404
+css/style.css   브랜드 스타일
+js/main.js      인터랙션 + 폼 + 트래킹 (상단 CONFIG 참고)
+llms.txt        생성형 AI 크롤러용 요약 (GEO)
+robots.txt      검색/AI 크롤러 허용 + sitemap 경로
+sitemap.xml     사이트맵
+assets/         로고 / 과정 썸네일 21종 / 대전점 시설 사진 19장
+```
+
+## 구현된 것 (기획서 대비)
+
+- 기획서 4.1 전체 플로우: Header → Hero → 신뢰지표 → 학원소개 → 카테고리 탭 4종 → 클래스 카드 21개 → 시설 → 후기(필터) → FAQ(AEO 즉답형 9개) → 오시는길(지역별 안내) → 상담폼 → Footer
+- 전환 장치: 히어로 CTA, 클래스 카드별 "이 수업 상담받기"(관심 클래스 폼 자동 태깅), 후기 하단 CTA, 전화·카카오톡·폼 플로팅 버튼, 스크롤 50% sticky 바
+- 폼: 이름/연락처(형식 검증)/거주지역/관심분야/관심클래스(21개)/희망시간대/개인정보동의 + 허니팟 스팸 방지
+- SEO/AEO/GEO: 타이틀·메타·OG, H1 1개 헤딩 위계, 지역+과정명 alt, JSON-LD(EducationalOrganization/LocalBusiness + Course 21 + FAQPage), llms.txt, robots.txt, sitemap.xml
+- 과정 리스트는 기획서의 가정 리스트가 아니라 **daejeon.kcookart.com에 실제 개설된 대전점 조리과정 기준**으로 구성 (자격증 6 + 정통 스킬업 7 + 생활·취미 5 + 진학·창업 3 = 21)
+
+---
+
+## ✅ 사장님이 직접 해야 할 일 (중요도 순)
+
+### 1. 폼 백엔드 연동 — 이것만 하면 상담 접수가 실제로 동작합니다
+현재 폼은 백엔드 미연동 상태라 제출 시 "전화/카카오톡 안내" 메시지가 나옵니다.
+1. https://formspree.io 가입 → New Form 생성 → 엔드포인트 URL 복사 (`https://formspree.io/f/xxxxxxx`)
+2. `js/main.js` 맨 위 `CONFIG.FORM_ENDPOINT: ''` 에 붙여넣기
+3. 커밋·푸시하면 끝. (Formspree 무료 플랜: 월 50건 / 대안: 구글 앱스 스크립트 웹앱 URL도 그대로 동작)
+
+### 2. GitHub Pages 활성화 — 페이지 공개
+저장소 **Settings → Pages → Source: Deploy from a branch → Branch: `main` / `/ (root)`** 선택 후 저장.
+1~2분 후 https://taehyeung123.github.io/koreacook/ 에서 확인.
+(커스텀 도메인 연결 시: 같은 화면에서 도메인 입력 + DNS CNAME 설정, 그리고 `index.html`·`sitemap.xml`·`robots.txt`·`llms.txt`의 URL 일괄 치환)
+
+### 3. 실데이터 확인 (기획서 11장 체크리스트)
+- [ ] 21개 과정 개설 여부 최종 확인 (실제 사이트 기준으로 넣었지만 폐강/신설 반영)
+- [ ] 과정별 수강료·시수·국비지원 여부 → 상담 스크립트/FAQ 반영
+- [ ] 주차 안내 확정 → `index.html` 오시는길·FAQ의 "상담 시 안내" 문구 교체
+- [ ] 후기 섹션: 현재 **예시 표기된 샘플 6건** → 실제 수강생 후기로 교체 (초상권·게재 동의 필수). 교체 후 "예시" 배지와 안내 문구 삭제
+- [ ] 강사진 정보 공개 범위 확정 시 강사 소개 섹션 추가 검토
+
+### 4. 트래킹 설치 (광고 돌리기 전에)
+- GA4 측정 ID 발급 → `js/main.js` `CONFIG.GA4_ID`에 입력 (예: `G-XXXXXXX`)
+- 메타 픽셀 ID → `CONFIG.META_PIXEL_ID`
+- 전환 이벤트는 이미 심어져 있습니다: `form_submit_success`, `cta_click`, `course_cta_click` 등
+
+### 5. 검색 등록
+- [ ] 구글 서치콘솔에 사이트 등록 + sitemap.xml 제출
+- [ ] 네이버 서치어드바이저 등록 + sitemap 제출
+- [ ] 네이버 스마트플레이스 정보와 페이지 정보(주소·전화·운영시간) 100% 일치 확인
+
+### 6. 본사 확인 사항
+- [ ] 본사/대전점에 랜딩페이지 운영 및 브랜드 자산(로고·사진) 사용 승인 확인
+- [ ] 로고 원본(AI/EPS/투명 PNG) 수급 시 `assets/img/logo/` 교체
+- [ ] 개인정보처리방침 최신본 여부 확인 (현재 2025-05-01 시행본 이관)
+
+---
+
+*기획 문서: 코요아 폴더 `코리아요리아트아카데미_대전점_요리학과_랜딩페이지_기획서.md` 참고*
