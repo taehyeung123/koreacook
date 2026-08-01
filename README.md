@@ -3,7 +3,7 @@
 대전 둔산동 요리학원(코리아요리아트아카데미 대전점)의 **요리학과 단독 DB수집형 랜딩페이지**입니다.
 `코리아요리아트아카데미_대전점_요리학과_랜딩페이지_기획서.md` 기반으로 제작되었습니다.
 
-- **라이브 URL(예정)** : https://taehyeung123.github.io/koreacook/
+- **라이브 URL** : https://taehyeung123.github.io/koreacook/ ✅ (2026-08-01 배포 완료)
 - **스택** : 정적 HTML + CSS + Vanilla JS (빌드 불필요, GitHub Pages 바로 배포)
 - **브랜드** : daejeon.kcookart.com 실사용 값 추출 적용
   - 메인 컬러 `#ffc000` (골드) — 공식 사이트 CSS `--main-color` 그대로
@@ -43,10 +43,9 @@ assets/         로고 / 과정 썸네일 21종 / 대전점 시설 사진 19장
 2. `js/main.js` 맨 위 `CONFIG.FORM_ENDPOINT: ''` 에 붙여넣기
 3. 커밋·푸시하면 끝. (Formspree 무료 플랜: 월 50건 / 대안: 구글 앱스 스크립트 웹앱 URL도 그대로 동작)
 
-### 2. GitHub Pages 활성화 — 페이지 공개
-저장소 **Settings → Pages → Source: Deploy from a branch → Branch: `main` / `/ (root)`** 선택 후 저장.
-1~2분 후 https://taehyeung123.github.io/koreacook/ 에서 확인.
-(커스텀 도메인 연결 시: 같은 화면에서 도메인 입력 + DNS CNAME 설정, 그리고 `index.html`·`sitemap.xml`·`robots.txt`·`llms.txt`의 URL 일괄 치환)
+### 2. ~~GitHub Pages 활성화~~ ✅ 완료됨
+이미 활성화되어 https://taehyeung123.github.io/koreacook/ 에 배포되어 있습니다. `main` 브랜치에 푸시하면 1~2분 내 자동 반영됩니다.
+(커스텀 도메인 연결 시: Settings → Pages에서 도메인 입력 + DNS CNAME 설정, 그리고 `index.html`·`sitemap.xml`·`robots.txt`·`llms.txt`의 URL 일괄 치환)
 
 ### 3. 실데이터 확인 (기획서 11장 체크리스트)
 - [ ] 21개 과정 개설 여부 최종 확인 (실제 사이트 기준으로 넣었지만 폐강/신설 반영)
