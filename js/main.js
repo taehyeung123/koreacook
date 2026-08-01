@@ -127,6 +127,7 @@ document.addEventListener('DOMContentLoaded', function () {
         stickyShown = show;
         sticky.hidden = false;
         sticky.classList.toggle('is-visible', show);
+        document.body.classList.toggle('has-stickybar', show);
       }
     };
     window.addEventListener('scroll', onScroll, { passive: true });
