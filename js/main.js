@@ -5,10 +5,11 @@
 
 /* ---------------------------------------------------------
    CONFIG — 배포 전 실제 값으로 교체해야 하는 항목
-   - FORM_ENDPOINT : 상담 폼 수신 주소.
-     Formspree(https://formspree.io)에서 폼 생성 후
-     'https://formspree.io/f/xxxxxxx' 형태의 URL을 넣거나,
-     구글 앱스 스크립트 웹앱 URL을 넣으면 즉시 동작합니다.
+   - FORM_ENDPOINT : 상담 폼 수신 주소 (구글 앱스 스크립트 웹앱).
+     저장소 apps-script/Code.gs를 구글시트에 설치·배포한 뒤
+     'https://script.google.com/macros/s/…/exec' URL을 넣으면
+     제출 내용이 시트에 쌓이고 이메일 알림이 발송됩니다.
+     (Formspree URL을 넣어도 동작하도록 함께 지원)
      비어 있으면 제출 시 전화/카카오톡 안내로 대체됩니다.
    - GA4_ID / NAVER_ID / META_PIXEL_ID : 발급 후 입력하면
      아래 트래킹 부트스트랩이 자동으로 활성화됩니다.
@@ -208,12 +209,20 @@ document.addEventListener('DOMContentLoaded', function () {
       submitBtn.disabled = true;
       submitBtn.textContent = '접수 중...';
 
-      fetch(CONFIG.FORM_ENDPOINT, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-        body: JSON.stringify(payload)
-      }).then(function (res) {
+      /* 앱스 스크립트 웹앱은 커스텀 헤더(JSON Content-Type)가 붙으면 CORS
+         프리플라이트에 걸려 실패한다 — 헤더 없이 보내면 text/plain 단순 요청이
+         되어 통과하고, doPost가 e.postData.contents로 JSON을 파싱한다.
+         Formspree는 반대로 application/json 헤더가 필요해 엔드포인트별 분기. */
+      var isAppsScript = CONFIG.FORM_ENDPOINT.indexOf('script.google') !== -1;
+      var fetchOpts = isAppsScript
+        ? { method: 'POST', body: JSON.stringify(payload) }
+        : { method: 'POST', headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' }, body: JSON.stringify(payload) };
+
+      fetch(CONFIG.FORM_ENDPOINT, fetchOpts).then(function (res) {
         if (!res.ok) throw new Error('submit failed: ' + res.status);
+        return res.json().catch(function () { return { ok: true }; });
+      }).then(function (data) {
+        if (data && data.ok === false) throw new Error(data.error || 'server error');
         form.reset();
         showResult('상담 신청이 접수되었습니다. 확인 후 빠르게 연락드리겠습니다!', true);
         track('form_submit_success', { region: region, interests: interests.join(',') });
